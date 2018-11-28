@@ -87,14 +87,14 @@ class ContactController extends Controller
      * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,$id)
+    public function update($id,Request $request)
     {
         $credentials = $request->all();
 
         $rules = [
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255|unique:contacts'.$id,
+            'email' => 'nullable|string|email|max:255|unique:contacts,email,'.$id,
             'phone_no' => 'nullable|numeric',
             'github' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255'
@@ -125,6 +125,6 @@ class ContactController extends Controller
            return response()->json(['success'=> false],404); 
         }
         $dev->delete();
-        return response()->json(['success'=>'Successfully deleted'],200);
+        return response()->json(['success'=>'Successfully deleted'],204);
     }
 }
