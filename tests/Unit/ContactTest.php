@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\User;
 use App\Contact;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,9 +21,6 @@ class ContactTest extends TestCase
 
 	public function testsContactsAreCreatedCorrectly()
     {
-    	$user = factory(User::class)->create();
-        $token =  str_random(10);
-        $headers = ['Authorization' => "Bearer $token"];
         $payload = [
             'first_name' => 'kay',
         	'last_name' => 'odole',
@@ -34,16 +30,13 @@ class ContactTest extends TestCase
         	'category' => 'Full Stack',
         ];
 
-        $this->json('POST', '/api/contact', $payload, $headers)
+        $this->json('POST', '/api/contact', $payload)
             ->assertStatus(201)
             ->assertJson(['success'=> 'Developer successffully created']);
     }
 
     public function testsContactsAreUpdatedCorrectly()
     {
-        $user = factory(User::class)->create();
-        $token =  str_random(10);
-        $headers = ['Authorization' => "Bearer $token"];
         $contact = factory(Contact::class)->create([
             'first_name' => 'kay',
         	'last_name' => 'odole',
@@ -62,16 +55,13 @@ class ContactTest extends TestCase
         	'category' => 'Full Stack',
         ];
 
-        $response = $this->json('PUT', '/api/contact/' . $contact->id, $payload, $headers)
+        $response = $this->json('PUT', '/api/contact/' . $contact->id, $payload)
             ->assertStatus(200)
             ->assertJson(['success'=> 'Successfully updated']);
     }
 
     public function testsContactsAreDeletedCorrectly()
     {
-        $user = factory(User::class)->create();
-        $token =  str_random(10);
-        $headers = ['Authorization' => "Bearer $token"];
         $contact = factory(Contact::class)->create([
             'first_name' => 'kay',
         	'last_name' => 'odole',
@@ -81,15 +71,12 @@ class ContactTest extends TestCase
         	'category' => 'Full Stack',
         ]);
 
-        $this->json('DELETE', '/api/contact/' . $contact->id, [], $headers)
+        $this->json('DELETE', '/api/contact/' . $contact->id, [] )
             ->assertStatus(204);
     }
 
     public function testsContactsAreSingleAndCorrect()
     {
-        $user = factory(User::class)->create();
-        $token =  str_random(10);
-        $headers = ['Authorization' => "Bearer $token"];
         $contact = factory(Contact::class)->create([
             'first_name' => 'kay',
         	'last_name' => 'odole',
@@ -99,7 +86,7 @@ class ContactTest extends TestCase
         	'category' => 'Full Stack',
         ]);
 
-        $this->json('GET', '/api/contact/' . $contact->id, [], $headers)
+        $this->json('GET', '/api/contact/' . $contact->id, [] )
             ->assertStatus(200);
     }
 
@@ -123,11 +110,7 @@ class ContactTest extends TestCase
         	'category' => 'Full Stack',
         ]);
 
-        $user = factory(User::class)->create();
-        $token =  str_random(10);
-        $headers = ['Authorization' => "Bearer $token"];
-
-        $response = $this->json('GET', '/api/contact', [], $headers)
+        $response = $this->json('GET', '/api/contact', [] )
             ->assertStatus(200)
             ->assertJson([
                 [ 'category' => 'Full Stack', 'num_of_devs' => 2 ]
