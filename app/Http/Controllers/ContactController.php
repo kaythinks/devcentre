@@ -11,7 +11,7 @@ class ContactController extends Controller
 {
     /**
     *@author Odole Olukayode <kaythinks@gmail.com>
-    *@var string $contact 
+    *@var object $contact 
     */
 
     protected $contact;
@@ -32,6 +32,10 @@ class ContactController extends Controller
                  ->select('category', DB::raw('count(id) as num_of_devs'))
                  ->groupBy('category')
                  ->get();
+                
+        if(count($devs) < 1){
+            return response()->json(['message'=>'No Data Found'],404);        
+        }         
 
         return response()->json($devs,200);    
     }
@@ -44,7 +48,6 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        /*$credentials = $request->only('first_name','last_name','email','phone_no','github','category');*/
         $credentials = $request->all();
 
         $rules = [
